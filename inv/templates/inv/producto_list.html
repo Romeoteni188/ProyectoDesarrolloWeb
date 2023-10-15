@@ -1,0 +1,94 @@
+{% extends 'base/base.html' %}
+
+{% block page_content %}
+  <!-- Dropdown Card Example -->
+  <div class="card shadow mb-4">
+    <!-- Card Header - Dropdown -->
+    <div
+        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Listado De Productos </h6>
+        <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                <div class="dropdown-header">Acciones:</div>
+                <a class="dropdown-item" onclick="return abrir_modal('{% url 'inv:producto_new' %}')" href="#"><i class="far fa-calendar-plus"></i>    Nuevo</a>
+            </div>
+        </div>
+    </div>
+    <!-- Card Body -->
+    <div class="card-body">
+        {% if not obj %}
+            <div class="alert alert-info">NO HAY PRODUCTOS HASTA EL MOMENTO..! </div>   
+        {% endif %}
+        <table class="table table-striped table-hover dt-responsive nowrap" style="width: 100%;">
+            <thead>
+                <th>Sub.Cat</th>
+                <th>Codigo</th>
+                <th>Barra</th>
+                <th>Descripcion</th>
+                <th>Exitencia</th>
+                <th>Marca</th>
+                <th>U.M</th>
+                <th>Estado</th>
+                <th class="all">Acciones</th>
+            </thead>
+            <tbody>
+                {% for item in obj %}
+                    <tr>
+                     <td>{{ item.subcategoria }}</td>
+                     <td>{{ item.codigo }}</td>
+                     <td>{{ item.codigo_barra }}</td>
+                     <td>{{ item.descripcion }}</td>
+                     <td>{{ item.existencia }}</td>
+                     <td>{{ item.marca }}</td>
+                     <td>{{ item.unidad_id }}</td>
+                     <td>{{ item.estado|yesno:"Activo,Inactivo" }}</td>
+                     <td>
+                        <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'inv:producto_edit' item.id %}')">
+                            <i class="far fa-edit"></i></button>
+                            <a href="{% url 'inv:producto_inactivar' item.id %}" class="btn btn-danger btn-circle" role="button">
+                                <i class="far fa-thumbs-down"></i></a>
+                     </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block js_page %}
+<script>
+    $(document).ready(function(){
+        //tabla jquery 
+        $('.table').DataTable({
+            "language":{
+                "sProcessing":"Procesando...",
+                // "sLengthMenu":"Mostrar _Menu_ registros",
+                "sZerorecords":"No se encotraron resultados",
+                "sEmplyTable":"Ningun dato disponible en la tabla",
+                "sInfo":"Mostrando registros del _START_al_END_ de un total de _TOTAL_ registros",
+                "sInfoEmply":"Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFilltered":"(filtrando un total de _Max_ registros)",
+                "SInfoPostFix":"",
+                "sSearch":"Buscar",
+                "sInfoThousands":",",
+                "sLoadingRecors":"Cargando...",
+                "oPaginate":{
+                    "sFirst":"<span class='fa fa-angle-double-left'></span>",
+                    "sLast":"<span class='fa fa-angle-double-right'></span>",
+                    "sNext":"<span class='fa fa-angle-right'></span>",
+                    "sPrevious": "<span class='fa fa-angle-left'></span>",
+
+                },
+                "oAria":{
+                    "sSortAscending":":Activar para ordenar la columna de una manera ascendente",
+                    "sSortDescending":":Activar para ordenar la columna de una manera descendente"
+                }
+
+            }
+        });
+    }); 
+</script>
+{% endblock %}
