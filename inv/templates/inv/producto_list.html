@@ -22,7 +22,17 @@
         {% if not obj %}
             <div class="alert alert-info">NO HAY PRODUCTOS HASTA EL MOMENTO..! </div>   
         {% endif %}
-        <table class="table table-striped table-hover dt-responsive nowrap" style="width: 100%;">
+        <table 
+        id="table"
+        data-toggle="table"
+        data-pagination="true"
+        data-search="true"
+        data-show-columns="true"
+        data-show-toggle="true"
+        data-show-fullscreen="true"
+        data-toolbar=".buttons-toolbar"
+        data-locale="es-NI"
+        >
             <thead>
                 <th>Sub.Cat</th>
                 <th>Codigo</th>
@@ -60,7 +70,7 @@
 {% endblock %}
 {% block js_page %}
 <script>
-    $(document).ready(function(){
+    {% comment %} $(document).ready(function(){
         //tabla jquery 
         $('.table').DataTable({
             "language":{
@@ -89,6 +99,6 @@
 
             }
         });
-    }); 
+    });  {% endcomment %}
 </script>
 {% endblock %}

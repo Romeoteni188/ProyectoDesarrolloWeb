@@ -1,0 +1,71 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        {% if obj %}
+        <form role="form" id="frmCliente" action="{% url 'fact:cliente_edit' obj.pk %}" method="post"  class="form-inline">
+        {% else %}
+        <form role="form"  id="frmCliente" action="{% url 'fact:cliente_new' %}" method="post"  class="form-inline">
+        {% endif %}
+            <div class="col-xl-12 col-md-12 mb-12">
+                {% if obj %}
+                <div class="card border-left-warning shadow h-100 py-2">
+                {% else %}
+                <div class="card border-left-success shadow h-100 py-2">
+                {% endif %}
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            {% if obj %} Editar {% else %} Nuevo {% endif %} Cliente
+                            {% comment %} {% if t %} En Factura {% endif %} {% endcomment %}
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        {% csrf_token %}
+                        <div class="row">
+                            <input type="hidden" name="id" id="id" class="form-class frmid">
+                            {{ form.as_p }}
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span> Guardar</button>
+                                <button type="button" class="btn btn-success" onclick="return cerrar_modal()">
+                                        Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="far fa-calendar-plus fa-2x text-gray-300"></i>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div> 
+
+{% comment %} {% if t %} {% endcomment %}
+<script>
+$("#frmCliente").submit(function( e ) {
+    var frm = $('#frmCliente');
+    // alert("{{request.path}}")
+    $.ajax({
+            type: frm.attr('method'),
+            // url: frm.attr('action'),
+            url: "{{request.path}}",
+            data: frm.serialize(),
+            success: function (data) {
+                // alert(data);
+                // window.location.reload(true);
+                $("#id").val(data)
+                console.log(data)
+                cerrar_modal()
+            },
+            error: function(data,b,c) {
+                alert(data);
+                console.log(c)
+            }
+        });
+        return false;
+});

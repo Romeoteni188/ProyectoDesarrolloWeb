@@ -22,5 +22,7 @@ urlpatterns = [
     path('',include(('bases.urls','bases'), namespace='bases')),
     path('inv/',include(('inv.urls','inv'), namespace='inv')),
     path('cmp/',include(('cmp.urls','cmp'),namespace='cmp')),
+    path('fact/',include(('fact.urls','fact'),namespace='fact')),
+    path('api/', include(('api.urls', 'api'), namespace='api')),
     path('admin/', admin.site.urls),
 ]

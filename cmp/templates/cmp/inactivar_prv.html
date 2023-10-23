@@ -13,8 +13,10 @@
                                             ¿Inactivar<b> {{obj.descripcion}}</b>?
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-danger">Si, Eliminar <i class="far fa-question-circle"></i></button>
-                                    <button type="button" class="btn btn-success" onclick="cerrar_modal()">Cancelar</button>
+                                    <button type="button" class="btn btn-danger" id="btnInactivar"><i class="far fa-question-circle">
+                                        Si Inactivar</i></button>
+                                    <button type="button" class="btn btn-success" onclick="cerrar_modal()">
+                                        Cancelar</button>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-question-circle fa-2x text-gray-300"></i>
@@ -27,3 +29,49 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function(){
+        var token = $('input[name=csrfmiddlewaretoken]').val();
+        $.ajaxSetup({
+            beforeSend:function(xhr,settings){
+                if(!(/^http:.*/.test(settings.url)||/^http:.*/.test(settings.url))){
+                    xhr.setRequestHeader("X-CSRFToken",token);
+                }
+            }
+        });
+
+
+      $("#btnInactivar").click(function(e){
+         e.preventDefault();
+         //alert("provando")
+         var id={{obj.id}};
+         var template="{% url 'cmp:proveedor_inactivar' obj.id %}";
+         var data={"id":id}
+         data = JSON.stringify(data);
+
+        $.ajax({
+            type: "POST",
+            url: template,
+            data: data,
+            beforeSend:function(xhr,settings){
+              $.ajaxSettings.beforeSend(xhr,settings);
+            },
+            success:function(response){
+                console.log(response);
+                cerrar_modal();
+                //alert(response);
+                var tipo=(response.startsWith('Proveedor no exite')?'red':'green');
+                mensaje(response,tipo);
+
+            },
+            error:function(jqXHR,textStaturs,erroThrow){
+                console.log(textStaturs,erroThrow);
+                mensaje(rroThrow,'red');
+                cerrar_modal();
+            }
+        });
+
+      });
+
+    });
+</script>
