@@ -100,16 +100,16 @@ def facturas(request,id=None):
     
     if request.method == "GET":
         enc = FacturaEnc.objects.filter(pk=id).first()
-        if id:
-            if not enc:
-                messages.error(request,'Factura No Existe')
-                return redirect("fact:factura_list")
+        # if id:
+        #     if not enc:
+        #         messages.error(request,'Factura No Existe')
+        #         return redirect("fact:factura_list")
 
-            usr = request.user
-            if not usr.is_superuser:
-                if enc.uc != usr:
-                    messages.error(request,'Factura no fue creada por usuario')
-                    return redirect("fact:factura_list")
+        #     usr = request.user
+        #     if not usr.is_superuser:
+        #         if enc.uc != usr:
+        #             messages.error(request,'Factura no fue creada por usuario')
+        #             return redirect("fact:factura_list")
 
         if not enc:
             encabezado = {
@@ -133,7 +133,7 @@ def facturas(request,id=None):
 
         detalle=FacturaDet.objects.filter(factura=enc)
         contexto = {"enc":encabezado,"det":detalle,"clientes":clientes}
-        return render(request,template_name,contexto)
+        
     
     if request.method == "POST":
         cliente = request.POST.get("enc_cliente")
@@ -156,7 +156,7 @@ def facturas(request,id=None):
 
         if not id:
             messages.error(request,'No Puedo Continuar No Pude Detectar No. de Factura')
-            return redirect("fac:factura_list")
+            return redirect("fact:factura_list")
         
         codigo = request.POST.get("codigo")
         cantidad = request.POST.get("cantidad")
@@ -179,9 +179,92 @@ def facturas(request,id=None):
         if det:
             det.save()
         
-        return redirect("fac:factura_edit",id=id)
+        return redirect("fact:factura_edit",id=id)
 
     return render(request,template_name,contexto)
 
 class ProductoView(inv.ProductoView):
     template_name="fact/buscar_producto.html" 
+
+def borrar_detalle_factura(request, id):
+    template_name = "fact/factura_borrar_detalle.html"
+
+    det = FacturaDet.objects.get(pk=id)
+
+    if request.method=="GET":
+        context={"det":det}
+ 
+    if request.method == "POST":
+        usr = request.POST.get("usuario")
+        pas = request.POST.get("pass")
+
+        user =authenticate(username=usr,password=pas)
+
+        if not user:
+            return HttpResponse("Usuario o Clave Incorrecta")
+        
+        if not user.is_active:
+            return HttpResponse("Usuario Inactivo")
+
+        if user.is_superuser or user.has_perm("fact.sup_caja_facturadet"):
+            det.id = None
+            det.cantidad = (-1 * det.cantidad)
+            det.sub_total = (-1 * det.sub_total)
+            det.descuento = (-1 * det.descuento)
+            det.total = (-1 * det.total)
+            det.save()
+
+            return HttpResponse("ok")
+
+        return HttpResponse("Usuario no autorizado")
+    
+    return render(request,template_name,context)
+
+
+# @login_required(login_url="/login/")
+# @permission_required("fact.change_cliente",login_url="/login/")
+# def cliente_add_modify(request,pk=None):
+#     template_name="fac/cliente_form.html"
+#     context = {}
+
+#     if request.method=="GET":
+#         context["t"]="fc"
+#         if not pk:
+#             form = ClienteForm()
+#         else:
+#             cliente = Cliente.objects.filter(id=pk).first()
+#             form = ClienteForm(instance=cliente)
+#             context["obj"]=cliente
+#         context["form"] = form
+#     else:
+#         nombres = request.POST.get("nombres")
+#         apellidos = request.POST.get("apellidos")
+#         celular = request.POST.get("celular")
+#         tipo = request.POST.get("tipo")
+#         usr = request.user
+
+#         if not pk:
+#             cliente = Cliente.objects.create(
+#                 nombres=nombres,
+#                 apellidos=apellidos,
+#                 celular = celular,
+#                 tipo = tipo,
+#                 uc=usr,
+#             )
+#         else:
+#             cliente = Cliente.objects.filter(id=pk).first()
+#             cliente.nombres=nombres
+#             cliente.apellidos=apellidos
+#             cliente.celular = celular
+#             cliente.tipo = tipo
+#             cliente.um=usr.id
+
+#         cliente.save()
+#         if not cliente:
+#             return HttpResponse("No pude Guardar/Crear Cliente")
+        
+#         id = cliente.id
+#         return HttpResponse(id)
+    
+#     return render(request,template_name,context)
+    

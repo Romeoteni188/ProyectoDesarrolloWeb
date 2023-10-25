@@ -54,25 +54,27 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <h4>Sistema de Compras CodeCranium</h4>
-                <h3>Reporte de Compras al {{ today|date:"d/m/Y" }}</h3>
+                <center>
+                    <h4>Sistema de Facturación CodeCranium</h4>
+                    <h3>Reporte de Facturas<br><small>Período: {{f1 | date:"d/m/Y"}} - {{f2 | date:"d/m/Y"}}</small></h3>
+                </center>
             </div>
 
             <table class="table">
                 <thead>
                     <tr>
-                        <th>No. Compra</th>
-                        <th>Proveedor</th>
+                        <th>No. Factura</th>
                         <th>Fecha</th>
+                        <th>Cliente</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in obj %}
+                    {% for item in enc %}
                     <tr>
                         <td>{{ item.id }}</td>
-                        <td>{{ item.proveedor }}</td>
-                        <td>{{ item.fecha_compra | date:"d/m/Y" }}</td>
+                        <td>{{ item.fecha | date:"d/m/Y"  }}</td>
+                        <td>{{ item.cliente }}</td>
                         <td>{{ item.total }}</td>
                     </tr>
                     {% endfor %}

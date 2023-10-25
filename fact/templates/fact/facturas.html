@@ -6,7 +6,7 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
         <a href="#" class="btn btn-danger">Guardar</a>
-        {% comment %} <a href="{% url 'fact:factura_imprimir_one' enc.id %}" class="btn btn-success" target="_factura">Imprimir</a> {% endcomment %}
+        <a href="{% url 'fact:factura_imprimir_one' enc.id %}" class="btn btn-success" target="_factura">Imprimir</a>
         <a href="{% url 'fact:factura_list' %}" class="btn btn-info">Cancelar</a>
     </div>
     <div class="card-body">
@@ -194,7 +194,7 @@
 <script>
    
 
-    {% comment %} function calcular_detalle()
+     function calcular_detalle()
     {
         var cant,prec,desc,stotal,total;
 
@@ -229,9 +229,9 @@
         console.log("sub_total_detalle " + $('#sub_total_detalle').val());
         console.log("total_detalle " + $('#total_detalle').val());
 
-    } {% endcomment %}
+    } 
 
-     {% comment %} function buscarProducto()
+      function buscarProducto()
     {
         if ($("#enc_cliente").val()==="0" || $("#enc_cliente").val()===null){
             mensaje("Cliente No Seleccionado",'red');
@@ -287,7 +287,7 @@
             }
 
         });
-    }  {% endcomment %}
+    }  
 
      $(function () {
         $("#sidebarToggle").click();
@@ -315,7 +315,7 @@
             calcular_detalle();
         });
 
-        $("#enc_id").val("{{ enc.id }}");
+       $("#enc_id").val("{{ enc.id }}");
         $("#enc_cliente").val("{{ enc.cliente.id }}").change();
         $("#fecha").val("{{ enc.fecha|date:'Y-m-d' }}");
         $("#sub_total").val("{{ enc.sub_total }}");
@@ -324,17 +324,18 @@
 
         // $('#enc_cliente').select2().select2('val', $('#enc_cliente option:eq(1)').val());
         //https://select2.org/programmatic-control/add-select-clear-items
-        $("#enc_cliente").data('select2').trigger('select', {
+       {% comment %} $("#enc_cliente").data('select2').trigger('select', {
             data: {"id": 3}
-        });
+        }); {% endcomment %}
 
     }); 
 
-    {% comment %} function borrar_detalle(id)
+     function borrar_detalle(id)
     {
         // mensaje(id);
         $.confirm({
-            theme:"modern",
+            //supervan, modern
+            theme:"supervan",
             icon:"fab fa-keycdn",
             type:'red',
             title: "Confirmación Requerida",
@@ -345,11 +346,11 @@
                 this.$content.find('#usuario').select();
                 this.$content.find('#usuario').focus();
             },
-            buttons:{
+             buttons:{
                 borrar:{
                     text:"Borrar",
                     btnClass:"btn btn-danger",
-                    action: function(){
+                     action: function(){
                         var usuario = this.$content.find('input#usuario');
 	                    var pass = this.$content.find('input#password');
 
@@ -392,9 +393,9 @@
                     }
                     },
                 cancelar: function(){}
-                }
+                } 
         });
-    } {% endcomment %}
+    } 
 
     {% comment %} $("form").submit(function(e){
         var existencia = +$("#existencia").val();
