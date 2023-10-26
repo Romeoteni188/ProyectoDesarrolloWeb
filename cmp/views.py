@@ -1,9 +1,10 @@
+from django.forms.models import BaseModelForm
 from django.shortcuts import render,redirect
 from django.views import generic
 from django.urls import reverse_lazy
 
 import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required, permission_required
@@ -41,6 +42,7 @@ class ProveedorNew(SuccessMessageMixin,SinPrivilegios,generic.CreateView):
         form.instance.uc=self.request.user
         #print(self.request.user.id)
         return super().form_valid(form)
+    
 
 class ProveedorEdit(SuccessMessageMixin,SinPrivilegios,generic.UpdateView):
      model               = Proveedor

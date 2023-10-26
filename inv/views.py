@@ -229,7 +229,15 @@ class ProductoNew(SuccessMessageMixin,SinPrivilegios,generic.CreateView):
     def form_valid(self, form):
         form.instance.uc = self.request.user
         print(self.request.user.id)
+        
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super(ProductoNew, self).get_context_data(**kwargs)
+        context["categorias"] = Categoria.objects.all()
+        context["subcategorias"] = SubCategoria.objects.all()
+
+        return context
     
 class ProductoEdit(SuccessMessageMixin,SinPrivilegios,generic.UpdateView):
     model=Producto
@@ -244,6 +252,15 @@ class ProductoEdit(SuccessMessageMixin,SinPrivilegios,generic.UpdateView):
         form.instance.um = self.request.user.id
         print(self.request.user.id)
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs.get('pk')
+        context = super(ProductoEdit, self).get_context_data(**kwargs)
+        context["categorias"] = Categoria.objects.all()
+        context["subcategorias"] = SubCategoria.objects.all()
+        context["obj"] = Producto.objects.filter(pk=pk).first()
+        
+        return context
 
 @login_required(login_url="/login/")
 @permission_required("inv.change_producto",login_url="/login/")
