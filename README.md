@@ -5,6 +5,6 @@ buen control financiero para su negocio..!
 #
 <p align="center">
 	<a href="#">
-		<img src="./static/base/img/publicidad.gif" width="456" alt="gitmoji">
+		<img src="/static/base/img/publicidad.gif" width="456" alt="gitmoji">
 	</a>
 </p>
