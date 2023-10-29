@@ -26,15 +26,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = 'django-insecure-v78l48-ynqv$t6+pc*00++5g_8=!jb1h@ylumn1nzm%yslm86q'
-
+SECRET_KEY=config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 
-ALLOWED_HOSTS = ["127.0.0.1","herokuapp.com"]
+ALLOWED_HOSTS = ["127.0.0.1",".herokuapp.com"]
 # Application definition
 
-SECRET_KEY=config("SECRET_KEY")
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -137,7 +137,12 @@ USE_TZ = True
 STATIC_ROOT= os.path.join(BASE_DIR,'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_STORAGE='whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
+
+# MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 

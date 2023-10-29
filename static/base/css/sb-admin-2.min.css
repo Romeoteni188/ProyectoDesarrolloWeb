@@ -398,10 +398,21 @@ h1 {
 h2 {
     font-size: 2rem
 }
+.pp{
+    text-align: center;
+    text-align: justify;
+}
+.hh{
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+    line-height: 1.2;
+    text-align: center;
+}
 
 .h3,
 h3 {
-    font-size: 1.75rem
+    font-size: 1.75rem;
+   
 }
 
 .h4,
